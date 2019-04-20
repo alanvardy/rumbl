@@ -6,6 +6,27 @@ defmodule Rumbl.Accounts do
   alias Rumbl.Accounts.User
   alias Rumbl.Repo
 
+  import Ecto.Query
+
+  def get_user_by_email(email) do
+    from(u in User, join: c in assoc(u, :credential), where: c.email == ^email)
+    |> Repo.one()
+    |> Repo.preload(:credential)
+  end
+
+  def authenticate_by_email_and_pass(email, given_pass) do
+    user = get_user_by_email(email)
+
+    cond do
+      user && Comeonin.Pbkdf2.checkpw(given_pass, user.credential.password_hash) ->
+        {:ok, user}
+      user ->
+        {:error, :unauthorized}
+      true ->
+        Comeonin.Pbkdf2.dummy_checkpw()
+        {:error, :not_found}
+    end
+  end
   def list_users do
     Repo.all(User)
   end
@@ -62,6 +83,10 @@ defmodule Rumbl.Accounts do
 
   """
   def get_credential!(id), do: Repo.get!(Credential, id)
+
+  def get_credential_by(params) do
+    Repo.get_by(Credential, params)
+  end
 
   @doc """
   Creates a credential.
@@ -126,5 +151,15 @@ defmodule Rumbl.Accounts do
   """
   def change_credential(%Credential{} = credential) do
     Credential.changeset(credential, %{})
+  end
+
+  def change_registration(%User{} = user, params) do
+    User.registration_changeset(user, params)
+  end
+
+  def register_user(attrs \\ %{}) do
+    %User{}
+    |> User.registration_changeset(attrs)
+    |> Repo.insert()
   end
 end

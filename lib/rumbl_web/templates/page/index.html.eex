@@ -2,3 +2,12 @@
   <h1><%= gettext "Welcome to %{name}!", name: "Rumbl.io" %></h1>
   <p>Rumbl out loud</p>
 </section>
+
+<ul>
+  <li>
+    <%= link("Users", to: Routes.user_path(@conn, :index)) %>
+  </li>
+  <li>
+    <%= link("Log in", to: Routes.session_path(@conn, :new)) %>
+  </li>
+</ul>

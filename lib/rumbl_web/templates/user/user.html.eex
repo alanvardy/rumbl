@@ -1,1 +1,8 @@
-<b><%= first_name(@user) %></b> (<%= @user.id %>)
+<p>
+    <b><%= first_name(@user) %></b> (<%= @user.id %>)
+</p>
+<%= if assigns[:credential] do %>
+<p>
+    <%= @credential.email %>
+</p>
+<% end %>
