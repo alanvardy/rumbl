@@ -21,6 +21,7 @@ defmodule RumblWeb.SessionController do
     end
   end
 
+  @spec delete(Plug.Conn.t(), any()) :: Plug.Conn.t()
   def delete(conn, _) do
     conn
     |> RumblWeb.Auth.logout()

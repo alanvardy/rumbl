@@ -1,6 +1,6 @@
 {application,rumbl,
              [{applications,[kernel,stdlib,elixir,logger,runtime_tools,
-                             pbkdf2_elixir,gettext,jason,comeonin,ex_doc,
+                             pbkdf2_elixir,gettext,jason,comeonin,
                              phoenix_pubsub,postgrex,ecto_sql,phoenix_html,
                              plug_cowboy,phoenix,phoenix_ecto]},
               {description,"rumbl"},

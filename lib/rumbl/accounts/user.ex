@@ -1,4 +1,7 @@
 defmodule Rumbl.Accounts.User do
+  @moduledoc """
+    User schema and changesets
+  """
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -12,6 +15,9 @@ defmodule Rumbl.Accounts.User do
     timestamps()
   end
 
+  @doc """
+  standard changeset for only user attributes
+  """
   def changeset(user, attrs) do
     user
     |> cast(attrs, [:name, :username])
@@ -19,6 +25,9 @@ defmodule Rumbl.Accounts.User do
     |> validate_length(:username, min: 1, max: 20)
   end
 
+  @doc """
+  changeset for 
+  """
   def registration_changeset(user, params) do
     user
     |> changeset(params)
