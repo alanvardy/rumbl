@@ -21,8 +21,8 @@ defmodule RumblWeb.VideoController do
     render(conn, "new.html", changeset: changeset)
   end
 
-  @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
-  def create(conn, %{"video" => video_params}) do
+  @spec create(Plug.Conn.t(), map(), any()) :: Plug.Conn.t()
+  def create(conn, %{"video" => video_params}, _current_user) do
     case Multimedia.create_video(video_params) do
       {:ok, video} ->
         conn
