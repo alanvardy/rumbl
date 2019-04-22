@@ -1,6 +1,6 @@
 defmodule Rumbl.Accounts.User do
   @moduledoc """
-    User schema and changesets
+    Users for site
   """
   use Ecto.Schema
   import Ecto.Changeset
@@ -26,7 +26,7 @@ defmodule Rumbl.Accounts.User do
   end
 
   @doc """
-  changeset for 
+  changeset for user registration, includes credentials
   """
   def registration_changeset(user, params) do
     user

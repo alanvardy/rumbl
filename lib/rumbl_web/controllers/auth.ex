@@ -8,8 +8,10 @@ defmodule RumblWeb.Auth do
   alias Rumbl.Accounts
   alias RumblWeb.Router.Helpers, as: Routes
 
+  @spec init(any()) :: any()
   def init(opts), do: opts
 
+  @spec call(Plug.Conn.t(), any()) :: Plug.Conn.t()
   def call(conn, _opts) do
     user_id = get_session(conn, :user_id)
     user = user_id && Accounts.get_user(user_id)
@@ -31,6 +33,7 @@ defmodule RumblWeb.Auth do
     end
   end
 
+  @spec logout(Plug.Conn.t()) :: Plug.Conn.t()
   def logout(conn) do
     configure_session(conn, drop: true)
   end

@@ -8,12 +8,14 @@ defmodule Rumbl.Accounts do
 
   import Ecto.Query
 
+  @spec get_user_by_email(any()) :: any()
   def get_user_by_email(email) do
     from(u in User, join: c in assoc(u, :credential), where: c.email == ^email)
     |> Repo.one()
     |> Repo.preload(:credential)
   end
 
+  @spec authenticate_by_email_and_pass(any(), any()) :: any()
   def authenticate_by_email_and_pass(email, given_pass) do
     user = get_user_by_email(email)
 
@@ -27,22 +29,27 @@ defmodule Rumbl.Accounts do
         {:error, :not_found}
     end
   end
+  @spec list_users() :: [any()]
   def list_users do
     Repo.all(User)
   end
 
+@spec get_user(number()) :: User.t()
   def get_user(id) do
     Repo.get(User, id)
   end
 
+  @spec get_user!(number()) :: User.t()
   def get_user!(id) do
     Repo.get!(User, id)
   end
 
+  @spec get_user_by(%{}) :: User.t()
   def get_user_by(params) do
     Repo.get_by(User, params)
   end
 
+  @spec change_user(User.t()) :: Ecto.Changeset.t()
   def change_user(%User{} = user) do
     User.changeset(user, %{})
   end

@@ -8,6 +8,6 @@
     <%= link("Users", to: Routes.user_path(@conn, :index)) %>
   </li>
   <li>
-    <%= link("Log in", to: Routes.session_path(@conn, :new)) %>
+    <%= link("Videos", to: Routes.video_path(@conn, :index)) %>
   </li>
 </ul>

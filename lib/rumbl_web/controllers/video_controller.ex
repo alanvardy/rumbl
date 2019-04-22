@@ -4,16 +4,24 @@ defmodule RumblWeb.VideoController do
   alias Rumbl.Multimedia
   alias Rumbl.Multimedia.Video
 
-  def index(conn, _params) do
-    videos = Multimedia.list_videos()
+  def action(conn, _) do
+    args = [conn, conn.params, conn.assigns.current_user]
+    apply(__MODULE__, action_name(conn), args)
+  end
+
+  @spec index(Plug.Conn.t(), any(), Rumbl.Accounts.User.t()) :: Plug.Conn.t()
+  def index(conn, _params, current_user) do
+    videos = Multimedia.list_user_videos(current_user)
     render(conn, "index.html", videos: videos)
   end
 
-  def new(conn, _params) do
-    changeset = Multimedia.change_video(%Video{})
+  @spec new(Plug.Conn.t(), any(), any()) :: Plug.Conn.t()
+  def new(conn, _params, current_user) do
+    changeset = Multimedia.change_video(current_user, %Video{})
     render(conn, "new.html", changeset: changeset)
   end
 
+  @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def create(conn, %{"video" => video_params}) do
     case Multimedia.create_video(video_params) do
       {:ok, video} ->
@@ -26,19 +34,22 @@ defmodule RumblWeb.VideoController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    video = Multimedia.get_video!(id)
+  @spec show(Plug.Conn.t(), map(), Rumbl.Accounts.User.t()) :: Plug.Conn.t()
+  def show(conn, %{"id" => id}, current_user) do
+    video = Multimedia.get_user_video!(current_user, id)
     render(conn, "show.html", video: video)
   end
 
-  def edit(conn, %{"id" => id}) do
-    video = Multimedia.get_video!(id)
-    changeset = Multimedia.change_video(video)
+  @spec edit(Plug.Conn.t(), map(), Rumbl.Accounts.User.t()) :: Plug.Conn.t()
+  def edit(conn, %{"id" => id}, current_user) do
+    video = Multimedia.get_user_video!(current_user, id)
+    changeset = Multimedia.change_video(current_user, video)
     render(conn, "edit.html", video: video, changeset: changeset)
   end
 
-  def update(conn, %{"id" => id, "video" => video_params}) do
-    video = Multimedia.get_video!(id)
+  @spec update(Plug.Conn.t(), map(), Rumbl.Accounts.User.t()) :: Plug.Conn.t()
+  def update(conn, %{"id" => id, "video" => video_params}, current_user) do
+    video = Multimedia.get_user_video!(current_user, id)
 
     case Multimedia.update_video(video, video_params) do
       {:ok, video} ->
@@ -51,8 +62,9 @@ defmodule RumblWeb.VideoController do
     end
   end
 
-  def delete(conn, %{"id" => id}) do
-    video = Multimedia.get_video!(id)
+  @spec delete(Plug.Conn.t(), map(), Rumbl.Accounts.User.t()) :: Plug.Conn.t()
+  def delete(conn, %{"id" => id}, current_user) do
+    video = Multimedia.get_user_video!(current_user, id)
     {:ok, _video} = Multimedia.delete_video(video)
 
     conn

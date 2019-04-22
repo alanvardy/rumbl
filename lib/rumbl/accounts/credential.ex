@@ -1,4 +1,7 @@
 defmodule Rumbl.Accounts.Credential do
+  @moduledoc """
+    Credentials for authenticating users
+  """
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -25,7 +28,7 @@ defmodule Rumbl.Accounts.Credential do
     case changeset do
       %Ecto.Changeset{valid?: true, changes: %{password: pass}} ->
         put_change(changeset, :password_hash, Comeonin.Pbkdf2.hashpwsalt(pass))
-        
+
       _ -> changeset
     end
   end
