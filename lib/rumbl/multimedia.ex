@@ -20,7 +20,7 @@ defmodule Rumbl.Multimedia do
   """
   def list_videos do
     Video
-    |> Repo.all
+    |> Repo.all()
     |> preload_user()
   end
 
@@ -122,12 +122,19 @@ defmodule Rumbl.Multimedia do
   def get_user_video!(%Accounts.User{} = user, id) do
     from(v in Video, where: v.id == ^id)
     |> user_videos_query(user)
-    |> Repo.one!
+    |> Repo.one!()
     |> preload_user()
+    |> preload_category()
   end
 
   def create_category(name) do
     Repo.get_by(Category, name: name) || Repo.insert!(%Category{name: name})
+  end
+
+  def list_alphabetical_categories do
+    Category
+    |> Category.alphabetical()
+    |> Repo.all()
   end
 
   defp user_videos_query(query, %Accounts.User{id: user_id}) do
@@ -140,5 +147,9 @@ defmodule Rumbl.Multimedia do
 
   defp preload_user(video_or_videos) do
     Repo.preload(video_or_videos, :user)
+  end
+
+  defp preload_category(video_or_videos) do
+    Repo.preload(video_or_videos, :category)
   end
 end

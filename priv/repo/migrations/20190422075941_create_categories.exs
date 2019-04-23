@@ -1,4 +1,5 @@
 defmodule Rumbl.Repo.Migrations.CreateCategories do
+  @moduledoc false
   use Ecto.Migration
 
   def change do
