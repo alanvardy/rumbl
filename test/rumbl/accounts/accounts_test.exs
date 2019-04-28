@@ -19,5 +19,10 @@ defmodule Rumble.AccountsTest do
       assert user.credential.email == "eva@test.com"
       assert [%User{id: ^id}] = Accounts.list_users()
     end
+
+    test "with invalid data does not insert user" do
+      assert {:error, _changeset} = Accounts.register_user(@invalid_attrs)
+      assert Accounts.list_users() == []
+    end
   end
 end
